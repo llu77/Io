@@ -1,0 +1,43 @@
+---
+# Workflow for self-hosted runner
+# This workflow demonstrates running jobs on a self-hosted runner
+
+name: Self-Hosted Runner Workflow
+
+'on':
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # The job will run on a self-hosted runner
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Display runner information
+        run: |
+          echo "Running on self-hosted runner"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner name: ${{ runner.name }}"
+          echo "Repository: ${{ github.repository }}"
+
+      - name: List directory contents
+        run: |
+          echo "Current directory:"
+          dir
+        shell: pwsh
+
+      - name: System information
+        run: |
+          echo "System information:"
+          systeminfo | findstr /C:"OS Name" /C:"OS Version"
+        shell: cmd
