@@ -15,6 +15,7 @@ npm install
 - `zod-to-json-schema` - Convert Zod schemas to JSON Schema
 - `zod-stream` - Streaming support for Zod schemas
 - `stream-hooks` - Stream processing utilities
+- `semver` - Semantic versioning parser and utilities
 
 ## Usage
 
@@ -66,9 +67,11 @@ const completion = await anthropicClient.chat.completions.create({
 console.log(JSON.stringify(completion, null, 2));
 ```
 
-## Running the Example
+## Running the Examples
 
-To run the example code:
+### Anthropic Claude Example
+
+To run the Anthropic Claude example with tool calling:
 
 ```bash
 npm run example
@@ -80,6 +83,16 @@ Note: Make sure to set your `ANTHROPIC_API_KEY` environment variable before runn
 export ANTHROPIC_API_KEY=your_api_key_here
 npm run example
 ```
+
+### Semver Example
+
+To run the semver example demonstrating semantic versioning operations:
+
+```bash
+npm run example:semver
+```
+
+This example demonstrates all semver functions including version parsing, comparison, sorting, and range operations.
 
 ## Building
 
@@ -98,7 +111,8 @@ The compiled JavaScript files will be in the `dist/` directory.
 ├── src/
 │   └── index.ts           # Main LLM client library
 ├── examples/
-│   └── anthropic-example.ts  # Example usage
+│   ├── anthropic-example.ts  # Anthropic Claude example with tool calling
+│   └── semver-example.cjs    # Semver usage examples
 ├── dist/                  # Compiled output (generated)
 ├── package.json
 └── tsconfig.json

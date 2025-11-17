@@ -7,13 +7,20 @@
   "scripts": {
     "build": "tsc",
     "example": "tsx examples/anthropic-example.ts",
+    "example:semver": "node examples/semver-example.cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["llm", "anthropic", "claude", "ai"],
+  "keywords": [
+    "llm",
+    "anthropic",
+    "claude",
+    "ai"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.69.0",
+    "semver": "^7.7.3",
     "stream-hooks": "^3.0.0",
     "zod": "^3.25.76",
     "zod-stream": "^3.0.0",
