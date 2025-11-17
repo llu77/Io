@@ -1,0 +1,18 @@
+{
+  "name": "io",
+  "version": "1.0.0",
+  "description": "# 🎯 Agent Configuration - Final Version (Based on Latest Docs)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "stream-hooks": "^3.0.0",
+    "zod": "^3.25.76",
+    "zod-stream": "^3.0.0",
+    "zod-to-json-schema": "^3.24.6"
+  }
+}
