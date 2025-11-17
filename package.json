@@ -1,18 +1,27 @@
 {
   "name": "io",
   "version": "1.0.0",
-  "description": "# 🎯 Agent Configuration - Final Version (Based on Latest Docs)",
-  "main": "index.js",
+  "description": "LLM client wrapper with Anthropic support",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
+    "build": "tsc",
+    "example": "tsx examples/anthropic-example.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["llm", "anthropic", "claude", "ai"],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.69.0",
     "stream-hooks": "^3.0.0",
     "zod": "^3.25.76",
     "zod-stream": "^3.0.0",
     "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }
