@@ -1,0 +1,17 @@
+{
+  "name": "io-llm-client",
+  "version": "1.0.0",
+  "description": "A TypeScript library for interacting with various LLM providers using a unified interface, featuring Anthropic Claude integration",
+  "author": {
+    "name": "llu77"
+  },
+  "keywords": [
+    "llm",
+    "anthropic",
+    "claude",
+    "ai",
+    "typescript",
+    "api-client"
+  ],
+  "license": "ISC"
+}
