@@ -1,17 +1,32 @@
 # IO - LLM Client Library
 
-A TypeScript library for interacting with various LLM providers using a unified interface.
+A TypeScript/Python library for interacting with various LLM providers using a unified interface.
 
 This repository is also structured as a **Claude Code plugin**, allowing it to be used directly within Claude Code environments.
 
 ## Installation
 
+### TypeScript/Node.js
+
 ```bash
 npm install
 ```
 
+### Python
+
+```bash
+pip install anthropic
+```
+
+Or install in development mode:
+
+```bash
+pip install -e .
+```
+
 ## Dependencies
 
+### TypeScript/Node.js
 - `@anthropic-ai/sdk` - Anthropic Claude API client
 - `zod` - TypeScript-first schema validation
 - `zod-to-json-schema` - Convert Zod schemas to JSON Schema
@@ -19,9 +34,55 @@ npm install
 - `stream-hooks` - Stream processing utilities
 - `semver` - Semantic versioning parser and utilities
 
+### Python
+- `anthropic` - Anthropic Claude API client (version >= 0.40.0)
+
 ## Usage
 
-### Basic Example with Anthropic Claude
+### Python - Backend Expert (Claude Backend Expert Ultimate)
+
+```python
+from claude_backend_expert_ultimate import *
+
+expert = ClaudeBackendExpert()
+result = expert.analyze_backend_task("صمم REST API...")
+print(result["content"])
+```
+
+Before running, make sure to set your API key:
+
+```bash
+export ANTHROPIC_API_KEY="your-api-key-here"
+```
+
+**Features:**
+- Analyze backend development tasks in any language (including Arabic)
+- Get expert advice on REST API design, database design, system architecture, and more
+- Includes specialized `design_rest_api()` method for API design tasks
+
+**Example with more options:**
+
+```python
+from claude_backend_expert_ultimate import ClaudeBackendExpert
+
+# Initialize with custom model
+expert = ClaudeBackendExpert(model="claude-3-5-sonnet-20241022")
+
+# Design a REST API
+result = expert.design_rest_api(
+    "Design a REST API for a library management system",
+    include_code=True
+)
+print(result["content"])
+
+# Analyze any backend task
+result = expert.analyze_backend_task(
+    "How do I optimize database queries for a high-traffic application?"
+)
+print(result["content"])
+```
+
+### TypeScript/Node.js - Basic Example with Anthropic Claude
 
 ```typescript
 import { createLLMClient } from "@/index";
@@ -71,7 +132,30 @@ console.log(JSON.stringify(completion, null, 2));
 
 ## Running the Examples
 
-### Anthropic Claude Example
+### Python Backend Expert Examples
+
+To run the Python backend expert example:
+
+```bash
+python examples/python-backend-expert.py
+```
+
+For a simple test matching the problem statement:
+
+```bash
+python examples/simple-test.py
+```
+
+Note: Make sure to set your `ANTHROPIC_API_KEY` environment variable before running:
+
+```bash
+export ANTHROPIC_API_KEY=your_api_key_here
+python examples/simple-test.py
+```
+
+### TypeScript/Node.js Examples
+
+#### Anthropic Claude Example
 
 To run the Anthropic Claude example with tool calling:
 
@@ -86,7 +170,7 @@ export ANTHROPIC_API_KEY=your_api_key_here
 npm run example
 ```
 
-### Semver Example
+#### Semver Example
 
 To run the semver example demonstrating semantic versioning operations:
 
