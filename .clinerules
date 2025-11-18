@@ -1,0 +1,385 @@
+# Cline Development Rules
+
+## Stack & Technologies
+- **Frontend**: React 18+, Next.js 14+ (App Router), TypeScript
+- **Backend**: Node.js 20+, Express/Hono
+- **Edge**: Cloudflare Workers
+- **AI**: Claude API (Sonnet 4.5)
+- **Language**: TypeScript with strict mode ALWAYS
+
+## Core Development Principles
+
+### Think Before You Code
+1. **Understand the problem completely** before writing any code
+2. **Question ambiguities** - never make assumptions
+3. **Design the solution** mentally or on paper first
+4. **Consider edge cases** and error scenarios upfront
+5. **Plan for scalability** from the start
+
+### Code Quality Standards
+- **TypeScript strict mode** is mandatory (`"strict": true` in tsconfig.json)
+- **No `any` types** - use proper typing or `unknown` with type guards
+- **Comprehensive error handling** - every async operation should handle errors
+- **Security first** - validate all inputs, sanitize outputs, use environment variables for secrets
+- **Performance matters** - consider async operations, caching, and optimization
+
+### Error Handling Requirements
+```typescript
+// ✅ Good - Comprehensive error handling
+try {
+  const result = await riskyOperation();
+  return { success: true, data: result };
+} catch (error) {
+  logger.error('Operation failed', { error, context });
+  if (error instanceof SpecificError) {
+    return { success: false, error: 'User-friendly message' };
+  }
+  throw error; // Re-throw unexpected errors
+}
+
+// ❌ Bad - No error handling
+const result = await riskyOperation();
+return result;
+```
+
+### Security Best Practices
+1. **Environment Variables**: Use `.env` for all secrets, never commit secrets
+2. **Input Validation**: Validate and sanitize all user inputs using Zod or similar
+3. **API Security**: Implement rate limiting, authentication, CORS properly
+4. **Dependencies**: Regularly audit with `npm audit`, keep dependencies updated
+5. **SQL Injection**: Use parameterized queries or ORMs
+6. **XSS Protection**: Sanitize HTML content, use Content Security Policy
+7. **CSRF Protection**: Implement CSRF tokens for state-changing operations
+
+### TypeScript Best Practices
+```typescript
+// ✅ Good - Strict typing
+interface User {
+  id: string;
+  email: string;
+  name: string;
+}
+
+async function getUser(id: string): Promise<User | null> {
+  // Implementation
+}
+
+// ❌ Bad - Using any
+async function getUser(id: any): Promise<any> {
+  // Implementation
+}
+```
+
+## Project Structure
+
+```
+/
+├── .github/              # GitHub workflows and actions
+├── apps/
+│   ├── web/             # Next.js application
+│   ├── api/             # Node.js API server
+│   └── worker/          # Cloudflare Workers
+├── packages/
+│   ├── ui/              # Shared React components
+│   ├── utils/           # Shared utilities
+│   ├── types/           # Shared TypeScript types
+│   └── config/          # Shared configurations
+├── tests/
+│   ├── unit/            # Unit tests
+│   ├── integration/     # Integration tests
+│   └── e2e/             # End-to-end tests
+├── .env.example         # Environment variables template
+├── .eslintrc.js         # ESLint configuration
+├── .prettierrc          # Prettier configuration
+├── tsconfig.json        # Root TypeScript config
+└── package.json         # Root package.json
+```
+
+## Required Tooling
+
+### ESLint
+- `@typescript-eslint/parser`
+- `@typescript-eslint/eslint-plugin`
+- `eslint-config-prettier` (to avoid conflicts)
+- `eslint-plugin-react` (for React projects)
+- `eslint-plugin-react-hooks`
+
+### Prettier
+- Configure to work with ESLint
+- Set consistent formatting rules across team
+
+### Husky
+- Pre-commit: Run linting and type checking
+- Pre-push: Run tests
+- Commit-msg: Enforce conventional commits
+
+### Testing
+- **Unit Tests**: Jest or Vitest
+- **Integration Tests**: Supertest for APIs
+- **E2E Tests**: Playwright or Cypress
+- **Coverage**: Minimum 80% for critical paths
+
+## Git Workflow
+
+### Commit Messages
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+```
+feat: add user authentication
+fix: resolve memory leak in API
+docs: update README with setup instructions
+test: add unit tests for user service
+refactor: simplify error handling logic
+```
+
+### Branch Naming
+- `feat/description` - New features
+- `fix/description` - Bug fixes
+- `refactor/description` - Code refactoring
+- `docs/description` - Documentation updates
+- `test/description` - Test additions/updates
+
+### Pull Request Requirements
+1. All tests must pass
+2. Code coverage must not decrease
+3. ESLint and Prettier must pass
+4. At least one approval required
+5. No merge conflicts
+
+## Code Review Checklist
+
+### Before Submitting PR
+- [ ] Code follows TypeScript strict mode
+- [ ] All functions have proper types
+- [ ] Error handling is comprehensive
+- [ ] Security concerns addressed
+- [ ] Tests written and passing
+- [ ] Documentation updated
+- [ ] No console.logs in production code
+- [ ] Environment variables in .env.example
+
+### Reviewer Checklist
+- [ ] Code is readable and maintainable
+- [ ] Logic is correct and efficient
+- [ ] Edge cases are handled
+- [ ] Security vulnerabilities checked
+- [ ] Tests are meaningful and sufficient
+- [ ] No unnecessary complexity
+- [ ] Follows project conventions
+
+## Environment Variables
+
+### Required Variables (.env.example)
+```
+# App
+NODE_ENV=development
+PORT=3000
+APP_URL=http://localhost:3000
+
+# Database
+DATABASE_URL=postgresql://localhost:5432/mydb
+
+# API Keys (NEVER commit actual keys)
+CLAUDE_API_KEY=your_key_here
+CLOUDFLARE_API_TOKEN=your_token_here
+
+# Authentication
+JWT_SECRET=your_secret_here
+JWT_EXPIRY=7d
+
+# External Services
+REDIS_URL=redis://localhost:6379
+```
+
+## API Design
+
+### REST API Standards
+- Use proper HTTP methods (GET, POST, PUT, PATCH, DELETE)
+- Use meaningful HTTP status codes
+- Return consistent response formats
+- Version your APIs (`/api/v1/...`)
+- Implement pagination for list endpoints
+
+### Response Format
+```typescript
+// Success response
+{
+  success: true,
+  data: { ... }
+}
+
+// Error response
+{
+  success: false,
+  error: {
+    code: 'ERROR_CODE',
+    message: 'User-friendly error message',
+    details?: { ... }
+  }
+}
+```
+
+## Claude API Integration
+
+### Best Practices
+1. **Rate Limiting**: Implement exponential backoff
+2. **Token Management**: Monitor and limit token usage
+3. **Error Handling**: Handle API errors gracefully
+4. **Streaming**: Use streaming for long responses
+5. **Caching**: Cache responses when appropriate
+6. **Prompt Engineering**: Keep prompts clear and concise
+
+```typescript
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic({
+  apiKey: process.env.CLAUDE_API_KEY,
+});
+
+async function generateResponse(prompt: string): Promise<string> {
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4.5-20241022',
+      max_tokens: 4096,
+      messages: [{ role: 'user', content: prompt }],
+    });
+    
+    return message.content[0].type === 'text' 
+      ? message.content[0].text 
+      : '';
+  } catch (error) {
+    if (error instanceof Anthropic.APIError) {
+      // Handle API-specific errors
+      throw new Error(`Claude API error: ${error.message}`);
+    }
+    throw error;
+  }
+}
+```
+
+## Cloudflare Workers
+
+### Best Practices
+1. **Keep workers lightweight** - they have CPU time limits
+2. **Use KV for storage** - Workers KV for key-value storage
+3. **Edge caching** - Leverage Cloudflare's CDN
+4. **Environment variables** - Use wrangler secrets
+5. **Testing** - Use miniflare for local testing
+
+```typescript
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    try {
+      // Worker logic here
+      return new Response('Success', { status: 200 });
+    } catch (error) {
+      console.error('Worker error:', error);
+      return new Response('Internal Server Error', { status: 500 });
+    }
+  },
+};
+```
+
+## Testing Strategy
+
+### Unit Tests
+- Test individual functions and components
+- Mock external dependencies
+- Aim for high coverage on critical paths
+
+### Integration Tests
+- Test API endpoints
+- Test database interactions
+- Test service integrations
+
+### E2E Tests
+- Test critical user flows
+- Test in production-like environment
+- Keep minimal but meaningful
+
+```typescript
+// Example unit test
+describe('UserService', () => {
+  it('should create a user with valid data', async () => {
+    const userData = { email: 'test@example.com', name: 'Test User' };
+    const user = await userService.create(userData);
+    expect(user.email).toBe(userData.email);
+    expect(user.id).toBeDefined();
+  });
+
+  it('should throw error for invalid email', async () => {
+    const userData = { email: 'invalid', name: 'Test User' };
+    await expect(userService.create(userData)).rejects.toThrow();
+  });
+});
+```
+
+## Performance Guidelines
+
+1. **Async Operations**: Use Promise.all() for parallel operations
+2. **Database Queries**: Optimize queries, use indexes
+3. **Caching**: Implement Redis or in-memory caching
+4. **Bundle Size**: Monitor and optimize frontend bundle size
+5. **Lazy Loading**: Lazy load components and routes
+6. **Image Optimization**: Use Next.js Image component
+
+## Documentation Requirements
+
+### Code Documentation
+- JSDoc comments for public APIs
+- README for each package
+- Architecture Decision Records (ADRs) for major decisions
+
+### API Documentation
+- OpenAPI/Swagger for REST APIs
+- Include examples and error codes
+- Keep documentation up-to-date with code
+
+## Deployment
+
+### Checklist
+- [ ] All tests passing in CI/CD
+- [ ] Environment variables configured
+- [ ] Database migrations applied
+- [ ] Monitoring and logging configured
+- [ ] Health check endpoints implemented
+- [ ] Rollback plan prepared
+
+## Common Anti-Patterns to Avoid
+
+❌ **Don't:**
+- Use `any` type in TypeScript
+- Ignore error handling
+- Commit secrets or API keys
+- Skip writing tests
+- Write functions longer than 50 lines
+- Nest callbacks deeply (callback hell)
+- Mutate state directly in React
+- Use inline styles in React (use Tailwind/CSS modules)
+
+✅ **Do:**
+- Use proper TypeScript types
+- Handle all errors gracefully
+- Use environment variables for configuration
+- Write tests for critical functionality
+- Keep functions small and focused
+- Use async/await for async operations
+- Use immutable state updates
+- Use utility-first CSS or CSS-in-JS properly
+
+## Resources
+
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Cloudflare Workers Docs](https://developers.cloudflare.com/workers/)
+- [Claude API Documentation](https://docs.anthropic.com/)
+- [React Best Practices](https://react.dev/)
+
+## Questions?
+
+When in doubt:
+1. Refer to these rules
+2. Check existing code patterns
+3. Ask the team
+4. Document your decision
+
+Remember: **Think deeply BEFORE coding. Question ambiguity, never assume.**
