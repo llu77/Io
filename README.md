@@ -2,6 +2,8 @@
 
 A TypeScript library for interacting with various LLM providers using a unified interface.
 
+This repository is also structured as a **Claude Code plugin**, allowing it to be used directly within Claude Code environments.
+
 ## Installation
 
 ```bash
@@ -104,15 +106,35 @@ npm run build
 
 The compiled JavaScript files will be in the `dist/` directory.
 
+## Claude Code Plugin
+
+This repository is structured as a Claude Code plugin. To use it with Claude Code:
+
+### Installation
+
+```bash
+# Add this repository as a plugin marketplace
+/plugin marketplace add llu77/Io
+
+# Install the plugin
+/plugin install io-llm-client@llu77-Io
+```
+
+For detailed information about the plugin structure and how to create your own Claude Code plugins, see the [plugins/README.md](./plugins/README.md) documentation.
+
 ## Project Structure
 
 ```
 .
+├── .claude-plugin/
+│   └── plugin.json        # Claude Code plugin manifest
 ├── src/
 │   └── index.ts           # Main LLM client library
 ├── examples/
 │   ├── anthropic-example.ts  # Anthropic Claude example with tool calling
 │   └── semver-example.cjs    # Semver usage examples
+├── plugins/
+│   └── README.md          # Claude Code plugin documentation
 ├── dist/                  # Compiled output (generated)
 ├── package.json
 └── tsconfig.json
