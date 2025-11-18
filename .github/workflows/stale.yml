@@ -21,7 +21,7 @@ jobs:
     - uses: actions/stale@v5
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'This issue has been automatically marked as stale due to inactivity. Please provide an update or this issue will be closed in X days.'
-        stale-pr-message: 'This pull request has been automatically marked as stale due to inactivity. Please update or address review comments, or this PR will be closed in X days.'
+        stale-issue-message: 'Stale issue message'
+        stale-pr-message: 'Stale pull request message'
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
